@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DocumentPicker.Samples.DocumentPickerPage"             
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="True">
+    <StackLayout Spacing="10" Padding="10">
+        <Button x:Name="pickDocument" Text="Pick Document"/>
+        <StackLayout Orientation="Horizontal">
+        </StackLayout>
+        <ScrollView>
+            <StackLayout x:Name="ImageList">
+            </StackLayout>
+        </ScrollView>
+        <Button Clicked="Button_Clicked" Text="Navigate"/>
+    </StackLayout>
+</ContentPage>
