@@ -1,5 +1,7 @@
-﻿using DocumentPicker.Samples;
+﻿using DocumentConverter.Plugin.Shared.StreamProvider;
+using DocumentPicker.Samples;
 using Foundation;
+using Svg;
 using UIKit;
 
 namespace DocumentPicker.IOS
@@ -21,7 +23,8 @@ namespace DocumentPicker.IOS
         {
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
             Xamarin.Forms.Forms.Init();
-            LoadApplication(new App());
+            SvgPlatform.Init();
+            LoadApplication(new App(new StreamProviderImplementation()));
 
             return base.FinishedLaunching(app, options);
         }

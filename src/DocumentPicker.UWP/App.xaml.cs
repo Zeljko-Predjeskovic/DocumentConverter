@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Svg;
 using Xamarin.Forms.Xaml;
 
 namespace DocumentPicker.UWP
@@ -51,6 +52,7 @@ namespace DocumentPicker.UWP
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
                 FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
+                SvgPlatform.Init();
                 Xamarin.Forms.Forms.Init(e);
 
                 rootFrame.NavigationFailed += OnNavigationFailed;

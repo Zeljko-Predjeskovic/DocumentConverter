@@ -123,6 +123,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UwpStreamProviderImplementation.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -153,6 +154,9 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.14</Version>
     </PackageReference>
+    <PackageReference Include="Svg">
+      <Version>2.4.3.4</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Essentials">
       <Version>1.7.3</Version>
     </PackageReference>
@@ -164,9 +168,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DocumentPicker.Plugin\DocumentPicker.Plugin.csproj">
+    <ProjectReference Include="..\DocumentPicker.Plugin\DocumentConverter.Plugin.csproj">
       <Project>{e7daa66a-5132-4441-bffe-6661a28ebeb7}</Project>
-      <Name>DocumentPicker.Plugin</Name>
+      <Name>DocumentConverter.Plugin</Name>
     </ProjectReference>
     <ProjectReference Include="..\DocumentPicker.Sample\DocumentPicker.Samples.csproj">
       <Project>{a41fa517-4fa9-46b9-b243-d1980d9265ca}</Project>
