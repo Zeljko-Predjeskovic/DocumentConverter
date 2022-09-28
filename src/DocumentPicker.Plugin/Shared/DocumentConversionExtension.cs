@@ -20,7 +20,7 @@ namespace DocumentConverter.Plugin.Shared
 
             try
             {
-                using (var doc = await PdfDocument.OpenAsync(await CrossCallingStreamProvider.OpenAsync(filePath)))
+                using (var doc = await PdfDocument.OpenAsync(await CrossCallingStreamProvider.OpenReadAsync(filePath)))
                 {
 
                     return new PdfFileInfo()

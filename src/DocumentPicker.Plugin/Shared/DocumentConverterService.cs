@@ -63,7 +63,7 @@ namespace DocumentConverter.Plugin.Shared
 
             try
             {
-                using (var doc = await PdfDocument.OpenAsync(await _customStreamProvider.OpenAsync(filePath), cancellationToken: cancellationToken))
+                using (var doc = await PdfDocument.OpenAsync(await _customStreamProvider.OpenReadAsync(filePath), cancellationToken: cancellationToken))
                 {
                     return await doc.Pages[page - 1]
                         .ToSvgStringAsync(cancellationToken: cancellationToken);

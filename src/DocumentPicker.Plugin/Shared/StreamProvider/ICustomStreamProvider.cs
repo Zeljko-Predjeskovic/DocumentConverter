@@ -5,6 +5,6 @@ namespace DocumentConverter.Plugin.Shared.StreamProvider
 {
     public interface ICustomStreamProvider
     {
-        Task<Stream> OpenAsync(string filePath);
+        Task<Stream> OpenReadAsync(string filePath);
     }
 }

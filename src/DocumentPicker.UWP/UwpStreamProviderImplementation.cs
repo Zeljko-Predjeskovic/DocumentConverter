@@ -8,7 +8,7 @@ namespace DocumentPicker.UWP
 {
     public class UwpStreamProviderImplementation : ICustomStreamProvider
     {
-        public async Task<Stream> OpenAsync(string filePath)
+        public async Task<Stream> OpenReadAsync(string filePath)
         {
             var storageFile = await StorageFile.GetFileFromPathAsync(filePath);
 

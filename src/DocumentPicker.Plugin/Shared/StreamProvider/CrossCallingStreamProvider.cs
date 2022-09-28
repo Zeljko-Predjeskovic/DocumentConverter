@@ -12,9 +12,9 @@ namespace DocumentConverter.Plugin.Shared.StreamProvider
             _streamProvider = streamProvider;
         }
 
-        public static async Task<Stream> OpenAsync(string filePath)
+        public static async Task<Stream> OpenReadAsync(string filePath)
         {
-            return await _streamProvider.OpenAsync(filePath);
+            return await _streamProvider.OpenReadAsync(filePath);
         }
 
     }
