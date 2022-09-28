@@ -5,10 +5,10 @@ namespace DocumentConverter.Plugin.Shared.StreamProvider
 {
     public class StreamProviderImplementation : ICustomStreamProvider
     {
-        public async Task<Stream> OpenReadAsync(string filePath)
+        public Task<Stream> OpenReadAsync(string filePath)
         {
-            var stream = await Task.FromResult(File.Open(filePath,FileMode.Open));
-            return stream;
+            var stream = File.Open(filePath,FileMode.Open) as Stream;
+            return Task.FromResult(stream);
         }
     }
 }

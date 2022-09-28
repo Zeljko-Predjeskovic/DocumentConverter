@@ -2,6 +2,7 @@ using DocumentConverter.Plugin.Shared;
 using DocumentConverter.Plugin.Shared.Picker;
 using DocumentConverter.Plugin.Shared.StreamProvider;
 using Moq;
+using Svg;
 
 namespace DocumentConverter.Tests
 {
@@ -14,6 +15,7 @@ namespace DocumentConverter.Tests
         [SetUp]
         public void Setup()
         {
+            SvgPlatform.Init();
             var streamProvider = new StreamProviderImplementation();
             CrossCallingStreamProvider.RegisterStreamProvider(streamProvider);
 
@@ -24,32 +26,33 @@ namespace DocumentConverter.Tests
         public async Task WhenGivingPdfSource_ConvertToSvg()
         {
             //Arrange
-            var filePath = ".\\Resources\\l1.pdf";
+            var filePath = ".\\Resources\\Vienna.pdf";
             var outputDir = ".\\Resources";
-            var expectedOutput = ".\\Resources\\l1.svg";
+            var expectedOutput = ".\\Resources\\Vienna.svg";
 
             //Act
-            await _documentConverterService.ConvertPdfToSvgAsync(filePath, outputDir);
+            var result = await _documentConverterService.ConvertPdfToSvgAsync(filePath, outputDir);
 
             //Assert
+            Assert.That(result.PageCount, Is.EqualTo(1));
+            Assert.That(result.ResultPath, Is.EqualTo(expectedOutput));
             Assert.That(File.Exists(expectedOutput));
-            var input = await File.ReadAllLinesAsync(expectedOutput);
-            Assert.That(input.Any(s => s.Contains("<svg")));
-            Assert.That(input.Any(s => s.Contains("</svg>")));
+            var input = File.ReadAllText(expectedOutput);
+            Assert.That(result.Content, Is.EqualTo(input));
         }
 
         [Test]
         public async Task WhenGivingPdfSource_ConvertToSvgString()
         {
             //Arrange
-            var filePath = ".\\Resources\\l1.pdf";
+            var filePath = ".\\Resources\\Vienna.pdf";
 
             //Act
             var svgString = await _documentConverterService.ConvertPdfToSvgStringAsync(filePath);
 
             //Assert
-            Assert.That(svgString.Contains("<svg"));
-            Assert.That(svgString.Contains("</svg>"));
+            Assert.That(svgString.Content.Contains("<svg"));
+            Assert.That(svgString.Content.Contains("</svg>"));
         }
 
         [Test]
@@ -91,23 +94,31 @@ namespace DocumentConverter.Tests
 
 
         [Test]
-        public async Task WhenGivingScannedPdfFile_ShouldConvertToPdf()
+        public void WhenGivingScannedPdfFile_ShouldNotConvertToPdf()
         {
             //Arrange
             var filePath = ".\\Resources\\Scanned.pdf";
             var outputDir = ".\\Resources";
-            var expectedOutput = ".\\Resources\\Scanned.svg";
 
             //Act
-            var docResult = await _documentConverterService.ConvertPdfToSvgAsync(filePath, outputDir);
+            var docResult =  _documentConverterService.ConvertPdfToSvgAsync(filePath, outputDir);
 
             //Assert
-            Assert.That(File.Exists(expectedOutput));
-            Assert.That(docResult.FilePath, Is.EqualTo(expectedOutput));
-            Assert.That(docResult.PageCount, Is.EqualTo(1));
-            var input = await File.ReadAllLinesAsync(expectedOutput);
-            Assert.That(input.Any(s => s.Contains("<svg")));
-            Assert.That(input.Any(s => s.Contains("</svg>")));
+            Assert.ThrowsAsync<DocumentConverterException>(async () => await docResult);
+        }
+
+        [Test]
+        public void WhenGivingPdfFileWithOverOnePage_ShouldNotConvertToPdf()
+        {
+            //Arrange
+            var filePath = ".\\Resources\\l1.pdf";
+            var outputDir = ".\\Resources";
+
+            //Act
+            var docResult = _documentConverterService.ConvertPdfToSvgAsync(filePath, outputDir);
+
+            //Assert
+            Assert.ThrowsAsync<DocumentConverterException>(async () => await docResult);
         }
     }
 }

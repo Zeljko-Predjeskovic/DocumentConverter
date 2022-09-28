@@ -19,15 +19,17 @@ namespace DocumentPicker.Samples
     public partial class DocumentPickerPage : ContentPage
     {
         private readonly IDocumentConverterService _converterService;
-        ObservableCollection<PdfFileInfo> files = new ObservableCollection<PdfFileInfo>();
+        private readonly IFilePicker _filePicker;
+        ObservableCollection<string> filePaths = new ObservableCollection<string>();
         
         public DocumentPickerPage(ICustomStreamProvider streamProvider)
         {
             _converterService = new DocumentConverterService(new FilePickerImplementation(), streamProvider);
+            _filePicker = new FilePickerImplementation();
 
             InitializeComponent();
 
-            files.CollectionChanged += Files_CollectionChanged;
+            filePaths.CollectionChanged += Files_CollectionChanged;
 
             pickDocument.Clicked += async (sender, args) =>
             {
@@ -42,18 +44,18 @@ namespace DocumentPicker.Samples
                     }
                 };
 
-                var fileResult = await _converterService.PickDocumentAsync(pickerOptions);
+                var filePath = await _filePicker.PickAsync(pickerOptions);
 
-                if(fileResult != null)
+                if(filePath != null)
                 {
-                    files.Add(await DocumentConversionExtension.GetPdfFileInfo(fileResult));
+                    filePaths.Add(filePath);
                 }
             };
         }
 
         private async void Files_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (files.Count == 0)
+            if (filePaths.Count == 0)
             {
                 ImageList.Children.Clear();
                 return;
@@ -61,54 +63,54 @@ namespace DocumentPicker.Samples
             if (e.NewItems.Count == 0)
                 return;
 
-            var file = e.NewItems[0] as PdfFileInfo;
+            var file = e.NewItems[0] as string;
 
             List<string> pageStrings = new List<string>();
 
-            for (int i = 1; i <= file.PageCount; i++)
-            {
-                pageStrings.Add(i.ToString());
-            }
-
             int page = 1;
-            if (file.HasOverOnePage())
-                page = Convert.ToInt32(await DisplayActionSheet("Please choose a Page", "Your document has more than one page.", null, pageStrings.ToArray())) ;
 
             var progressBar = new ProgressBar();
             Grid.Children.Add(progressBar);
 
-            var newPngFilePath = await Task.Run(async () =>
+            var newPath = Path.Combine(FileSystem.CacheDirectory,
+                Path.GetFileNameWithoutExtension(file) + ".png");
+
+            var taskResult = await Task.Run(async () =>
             {
                 await progressBar.ProgressTo(0.3, 100, Easing.Linear);
-                var svgString = await _converterService.ConvertPdfToSvgStringAsync(file?.FilePath, page);
 
-                var svgDoc = SvgDocument.FromSvg<SvgDocument>(svgString);
-
-                if (DocumentConversionExtension.SvgHasOnlyImages(svgDoc))
+                try
                 {
-                    return null;
+                    var result = await _converterService.ConvertPdfToSvgStringAsync(file);
+
+                    var svgDoc = SvgDocument.FromSvg<SvgDocument>(result.Content);
+
+
+                    await progressBar.ProgressTo(0.75, 200, Easing.Linear);
+                    using (var f = File.Create(newPath))
+                    {
+                        var bitMap = svgDoc.DrawAllContents();
+                        bitMap.SavePng(f, 100);
+                        await progressBar.ProgressTo(1, 50, Easing.Linear);
+                    }
+
+                    return (newPath, true);
+                }
+                catch (DocumentConverterException ex)
+                {
+                    return (ex.Message, false);
                 }
 
-                var newPath = Path.Combine(FileSystem.CacheDirectory, Path.GetFileNameWithoutExtension(file?.FilePath) + ".png");
-
-                await progressBar.ProgressTo(0.75, 200, Easing.Linear);
-                using (var f = File.Create(newPath))
-                {
-                    var bitMap = svgDoc.DrawAllContents();
-                    bitMap.SavePng(f, 100);
-                    await progressBar.ProgressTo(1, 50, Easing.Linear);
-                }
-                return newPath; 
             });
-
-            if (newPngFilePath == null)
+            if (!taskResult.Item2)
             {
-                await DisplayAlert("Pdf is no valid!", "Please do not use pdfs with only one image! Instead, please load the image file", "OK", "Cancel");
+                await DisplayAlert("Converting failed! ", taskResult.Item1, "OK", "Cancel");
                 Grid.Children.Remove(progressBar);
+
                 return;
             }
             var image = new Image { WidthRequest = 300, HeightRequest = 300, Aspect = Aspect.AspectFit };
-            image.Source = ImageSource.FromFile(newPngFilePath);
+            image.Source = ImageSource.FromFile(newPath);
 
             ImageList.Children.Add(image);
 
