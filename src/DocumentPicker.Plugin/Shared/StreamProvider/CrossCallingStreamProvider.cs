@@ -6,16 +6,10 @@ namespace DocumentConverter.Plugin.Shared.StreamProvider
     public static class CrossCallingStreamProvider
     {
         private static ICustomStreamProvider _streamProvider;
-
+        public static ICustomStreamProvider StreamProvider() => _streamProvider; 
         public static void RegisterStreamProvider(ICustomStreamProvider streamProvider)
         {
             _streamProvider = streamProvider;
         }
-
-        public static async Task<Stream> OpenReadAsync(string filePath)
-        {
-            return await _streamProvider.OpenReadAsync(filePath);
-        }
-
     }
 }

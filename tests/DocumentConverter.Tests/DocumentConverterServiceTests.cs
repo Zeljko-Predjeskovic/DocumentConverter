@@ -10,7 +10,6 @@ namespace DocumentConverter.Tests
     public class DocumentConverterServiceTests
     {
 
-        private readonly Mock<IFilePicker> _filePickerMock = new ();
         private IDocumentConverterService _documentConverterService;
 
         [SetUp]
@@ -20,7 +19,7 @@ namespace DocumentConverter.Tests
             var streamProvider = new StreamProviderImplementation();
             CrossCallingStreamProvider.RegisterStreamProvider(streamProvider);
 
-            _documentConverterService = new DocumentConverterService(_filePickerMock.Object, streamProvider);
+            _documentConverterService = new DocumentConverterService(streamProvider);
         }
 
         [Test]
