@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using DocumentConverter.Plugin.Shared.StreamProvider;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,12 +7,14 @@ namespace DocumentPicker.Samples
 {
     public partial class App : Application
     {
-        public App()
+        public App(ICustomStreamProvider streamProvider)
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new DocumentPickerPage());
+            CrossCallingStreamProvider.RegisterStreamProvider(streamProvider);
+            MainPage = new NavigationPage(new DocumentPickerPage(streamProvider));
         }
+
         protected override void OnStart()
         {
             // Handle when your app starts
