@@ -10,5 +10,11 @@ namespace DocumentConverter.Plugin.Shared.StreamProvider
             var stream = File.Open(filePath,FileMode.Open) as Stream;
             return Task.FromResult(stream);
         }
+
+        public Task<Stream> OpenReadWriteAsync(string filePath)
+        {
+            var stream = File.Open(filePath, FileMode.Open, FileAccess.ReadWrite) as Stream;
+            return Task.FromResult(stream);
+        }
     }
 }

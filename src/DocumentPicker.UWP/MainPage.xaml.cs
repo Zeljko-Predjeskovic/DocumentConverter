@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Windows.Storage.Streams;
 using Windows.Storage;
 using DocumentConverter.Plugin.Shared.StreamProvider;
-using PdfToSvg;
 
 namespace DocumentPicker.UWP
 {

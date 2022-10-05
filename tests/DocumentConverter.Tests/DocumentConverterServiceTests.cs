@@ -122,5 +122,71 @@ namespace DocumentConverter.Tests
             var x = Assert.ThrowsAsync<DocumentConverterException>(async () => await docResult);
             x.Message.ShouldBe("Pdf document contains multiple pages - provide a single-page document");
         }
+
+        [Test]
+        public async Task WhenGivingPdfStreamInput_ShouldReturnSvgStreamOutput()
+        {
+            //Arrange
+            var svgStringExpected = await File.ReadAllTextAsync(".\\Resources\\Vienna.svg");
+            await using var inputStream = File.Open(".\\Resources\\Vienna.pdf",FileMode.OpenOrCreate,FileAccess.ReadWrite);
+            using var outputStream = new MemoryStream();
+       
+            
+            //Act
+            await _documentConverterService.ConvertPdfToSvgAsync(inputStream, outputStream);
+            outputStream.Seek(0, SeekOrigin.Begin);
+            //Assert
+            var svgDocResult = SvgDocument.Open<SvgDocument>(outputStream);
+            var svgDocExpected = SvgDocument.FromSvg<SvgDocument>(svgStringExpected);
+            svgDocResult.Children.Count.ShouldBe(svgDocExpected.Children.Count);
+            svgDocResult.Bounds.ShouldBe(svgDocExpected.Bounds);
+            svgDocResult.Height.ShouldBe(svgDocExpected.Height);
+        }
+
+        [Test]
+        public async Task WhenGivingInvalidPdfStreamInput_ShouldThrowException()
+        {
+            //Arrange
+            await using var inputStream = File.Open(".\\Resources\\TextFile.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            using var outputStream = new MemoryStream();
+
+            //Act
+            var action = _documentConverterService.ConvertPdfToSvgAsync(inputStream, outputStream);
+
+            //Assert
+            var x = Assert.ThrowsAsync<DocumentConverterException>(async () => await action);
+            x.Message.ShouldBe("The specified file is not a valid PDF file. No file header was found.");
+        }
+
+        [Test]
+        public async Task WhenGivingPdfWithManyPagesStreamInput_ShouldThrowException()
+        {
+            //Arrange
+            await using var inputStream = File.Open(".\\Resources\\l1.pdf", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            using var outputStream = new MemoryStream();
+
+            //Act
+            var action = _documentConverterService.ConvertPdfToSvgAsync(inputStream, outputStream);
+
+            //Assert
+            var x = Assert.ThrowsAsync<DocumentConverterException>(async () => await action);
+            x.Message.ShouldBe("Pdf document contains multiple pages - provide a single-page document");
+        }
+
+
+        [Test]
+        public async Task WhenGivingScannedPdfStreamInput_ShouldThrowException()
+        {
+            //Arrange
+            await using var inputStream = File.Open(".\\Resources\\Scanned.pdf", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            using var outputStream = new MemoryStream();
+
+            //Act
+            var action = _documentConverterService.ConvertPdfToSvgAsync(inputStream, outputStream);
+
+            //Assert
+            var x = Assert.ThrowsAsync<DocumentConverterException>(async () => await action);
+            x.Message.ShouldBe("The PDF page seems to be from a scanned document. Please upload this plan as image instead (.jpeg, .png)");
+        }
     }
 }

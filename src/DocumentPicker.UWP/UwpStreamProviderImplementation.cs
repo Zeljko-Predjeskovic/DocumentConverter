@@ -10,12 +10,21 @@ namespace DocumentPicker.UWP
     {
         public async Task<Stream> OpenReadAsync(string filePath)
         {
+            return await OpenInternalAsync(filePath, FileAccessMode.Read);
+        }
+
+        public async Task<Stream> OpenReadWriteAsync(string filePath)
+        {
+            return await OpenInternalAsync(filePath, FileAccessMode.ReadWrite);
+        }
+
+        internal async Task<Stream> OpenInternalAsync(string filePath, FileAccessMode fileAccessMode)
+        {
             var storageFile = await StorageFile.GetFileFromPathAsync(filePath);
 
-            var raStream = await storageFile.OpenReadAsync();
-            
-            return raStream.AsStream();
+            var raStream = await storageFile.OpenAsync(fileAccessMode);
 
+            return raStream.AsStream();
         }
     }
 }
