@@ -12,13 +12,10 @@ namespace DocumentConverter.Plugin.Shared
 {
     public class DocumentConverterService : IDocumentConverterService
     {
-
-        private readonly IFilePicker _filePicker;
         private readonly ICustomStreamProvider _customStreamProvider;
 
-        public DocumentConverterService(IFilePicker filePicker, ICustomStreamProvider customStreamProvider)
+        public DocumentConverterService(ICustomStreamProvider customStreamProvider)
         {
-            _filePicker = filePicker;
             _customStreamProvider = customStreamProvider;
         }
 
@@ -32,24 +29,28 @@ namespace DocumentConverter.Plugin.Shared
 
             try
             {
-                using (var doc = await PdfDocument.OpenAsync(filePath, cancellationToken: cancellationToken))
+                using(var openStream = await _customStreamProvider.OpenReadAsync(filePath))
                 {
-                    var svgFile = Path.Combine(outputDir, Path.GetFileNameWithoutExtension(filePath) + ".svg");
-                    await doc.Pages[0]
-                        .SaveAsSvgAsync(svgFile,
-                            cancellationToken: cancellationToken);
-
-                    var resultDocument = new DocumentConverterResult()
+                    using (var doc = await PdfDocument.OpenAsync(openStream,
+                               cancellationToken: cancellationToken))
                     {
-                        ResultPath = svgFile,
-                        PageCount = doc.Pages.Count,
-                        Content = File.ReadAllText(svgFile)
+                        var svgFile = Path.Combine(outputDir, Path.GetFileNameWithoutExtension(filePath) + ".svg");
+                        await doc.Pages[0]
+                            .SaveAsSvgAsync(svgFile,
+                                cancellationToken: cancellationToken);
 
-                    };
+                        var resultDocument = new DocumentConverterResult()
+                        {
+                            ResultPath = svgFile,
+                            PageCount = doc.Pages.Count,
+                            Content = File.ReadAllText(svgFile)
 
-                    Validate(resultDocument);
+                        };
 
-                    return resultDocument;
+                        Validate(resultDocument);
+
+                        return resultDocument;
+                    }
                 }
             }
             catch (FileNotFoundException e)
@@ -69,19 +70,22 @@ namespace DocumentConverter.Plugin.Shared
 
             try
             {
-                using (var doc = await PdfDocument.OpenAsync(await _customStreamProvider.OpenReadAsync(filePath),
-                           cancellationToken: cancellationToken))
+                using(var openStream = await _customStreamProvider.OpenReadAsync(filePath))
                 {
-                    var resultDocument = new DocumentConverterResult()
+                    using (var doc = await PdfDocument.OpenAsync(openStream,
+                               cancellationToken: cancellationToken))
                     {
-                        Content = await doc.Pages[0]
-                            .ToSvgStringAsync(cancellationToken: cancellationToken),
-                        PageCount = doc.Pages.Count
-                    };
+                        var resultDocument = new DocumentConverterResult()
+                        {
+                            Content = await doc.Pages[0]
+                                .ToSvgStringAsync(cancellationToken: cancellationToken),
+                            PageCount = doc.Pages.Count
+                        };
 
-                    Validate(resultDocument);
+                        Validate(resultDocument);
 
-                    return resultDocument;
+                        return resultDocument;
+                    }
                 }
             }
             catch (FileNotFoundException e)

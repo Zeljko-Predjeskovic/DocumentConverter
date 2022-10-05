@@ -24,7 +24,7 @@ namespace DocumentPicker.Samples
         
         public DocumentPickerPage(ICustomStreamProvider streamProvider)
         {
-            _converterService = new DocumentConverterService(new FilePickerImplementation(), streamProvider);
+            _converterService = new DocumentConverterService(streamProvider);
             _filePicker = new FilePickerImplementation();
 
             InitializeComponent();
