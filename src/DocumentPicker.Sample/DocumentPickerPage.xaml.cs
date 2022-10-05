@@ -20,10 +20,14 @@ namespace DocumentPicker.Samples
     {
         private readonly IDocumentConverterService _converterService;
         private readonly IFilePicker _filePicker;
+        private readonly ICustomStreamProvider _streamProvider;
+
+
         ObservableCollection<string> filePaths = new ObservableCollection<string>();
         
         public DocumentPickerPage(ICustomStreamProvider streamProvider)
         {
+            _streamProvider = streamProvider;
             _converterService = new DocumentConverterService(streamProvider);
             _filePicker = new FilePickerImplementation();
 
@@ -81,10 +85,14 @@ namespace DocumentPicker.Samples
 
                 try
                 {
-                    var result = await _converterService.ConvertPdfToSvgStringAsync(file);
+                    var inputStream = await _streamProvider.OpenReadWriteAsync(file);
+                    var outputStream = new MemoryStream();
 
-                    var svgDoc = SvgDocument.FromSvg<SvgDocument>(result.Content);
+                    await _converterService.ConvertPdfToSvgAsync(inputStream, outputStream);
+                    outputStream.Seek(0, SeekOrigin.Begin);
 
+                    var svgDoc = SvgDocument.Open<SvgDocument>(outputStream);
+                    
 
                     await progressBar.ProgressTo(0.75, 200, Easing.Linear);
                     using (var f = File.Create(newPath))

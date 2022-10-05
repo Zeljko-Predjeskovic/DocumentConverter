@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DocumentConverter.Plugin.Shared.Picker;
@@ -47,7 +48,7 @@ namespace DocumentConverter.Plugin.Shared
 
                         };
 
-                        Validate(resultDocument);
+                        ValidateResult(resultDocument);
 
                         return resultDocument;
                     }
@@ -82,7 +83,7 @@ namespace DocumentConverter.Plugin.Shared
                             PageCount = doc.Pages.Count
                         };
 
-                        Validate(resultDocument);
+                        ValidateResult(resultDocument);
 
                         return resultDocument;
                     }
@@ -98,24 +99,65 @@ namespace DocumentConverter.Plugin.Shared
             }
         }
 
-        public void Validate(DocumentConverterResult result)
+        public async Task ConvertPdfToSvgAsync(Stream inputStream, Stream outputStream, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                using (var doc = await PdfDocument.OpenAsync(inputStream, cancellationToken: cancellationToken))
+                {
+                    if (doc.Pages.Count > 1)
+                        throw new DocumentConverterException("Pdf document contains multiple pages - provide a single-page document");
+
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await doc.Pages[0].SaveAsSvgAsync(memoryStream, cancellationToken: cancellationToken);
+
+
+                        memoryStream.Seek(0, SeekOrigin.Begin);
+                        if (HasOnlyImages(memoryStream))
+                            throw new DocumentConverterException(
+                                "The PDF page seems to be from a scanned document. Please upload this plan as image instead (.jpeg, .png)");
+
+                        memoryStream.Seek(0, SeekOrigin.Begin);
+                        await memoryStream.CopyToAsync(outputStream);
+                    }
+                }
+            }
+            catch (PdfException e)
+            {
+                throw new DocumentConverterException(e.Message, e);
+            }
+        }
+
+        public void ValidateResult(DocumentConverterResult result)
         {
             if (HasOverOnePage(result))
                 throw new DocumentConverterException("Pdf document contains multiple pages - provide a single-page document");
 
-            if (SvgHasOnlyImages(result.Content))
+            if (HasOnlyImages(result.Content))
                 throw new DocumentConverterException("The PDF page seems to be from a scanned document. Please upload this plan as image instead (.jpeg, .png)");
         }
-
         private bool HasOverOnePage(DocumentConverterResult result)
         {
             return result.PageCount > 1;
         }
 
-        private bool SvgHasOnlyImages(string svgString)
+        private bool HasOnlyImages(string svgString)
         {
             var svgDocument = SvgDocument.FromSvg<SvgDocument>(svgString);
 
+            return SvgHasOnlyImages(svgDocument);
+        }
+
+        private bool HasOnlyImages(Stream stream)
+        {
+            var svgDocument = SvgDocument.Open<SvgDocument>(stream);
+
+            return SvgHasOnlyImages(svgDocument);
+        }
+
+        private bool SvgHasOnlyImages(SvgDocument svgDocument)
+        {
             var svgElements = svgDocument.GetDescendants().ToArray();
             var numberOfVisibleElementExceptImages = svgElements.OfType<SvgVisualElement>().Count(x => !(x is SvgImage) && !(x is SvgUse) && !(x is SvgGroup));
             var allImages = svgElements.OfType<SvgImage>().ToArray();
