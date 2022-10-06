@@ -24,7 +24,7 @@ namespace DocumentPicker.IOS
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
             Xamarin.Forms.Forms.Init();
             SvgPlatform.Init();
-            LoadApplication(new App(new StreamProviderImplementation()));
+            LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
         }

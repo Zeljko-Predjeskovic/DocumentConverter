@@ -25,10 +25,10 @@ namespace DocumentPicker.Samples
 
         ObservableCollection<string> filePaths = new ObservableCollection<string>();
         
-        public DocumentPickerPage(ICustomStreamProvider streamProvider)
+        public DocumentPickerPage()
         {
-            _streamProvider = streamProvider;
-            _converterService = new DocumentConverterService(streamProvider);
+            _streamProvider = CustomStreamProvider.Instance;
+            _converterService = new DocumentConverterService(CustomStreamProvider.Instance);
             _filePicker = new FilePickerImplementation();
 
             InitializeComponent();

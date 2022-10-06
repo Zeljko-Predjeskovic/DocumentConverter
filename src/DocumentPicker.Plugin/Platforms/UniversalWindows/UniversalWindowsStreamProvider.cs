@@ -1,12 +1,12 @@
 ﻿using System;
+using DocumentConverter.Plugin.Shared.StreamProvider;
 using System.IO;
 using System.Threading.Tasks;
-using DocumentConverter.Plugin.Shared.StreamProvider;
 using Windows.Storage;
 
-namespace DocumentPicker.UWP
+namespace DocumentConverter.Plugin.Platforms.UniversalWindows
 {
-    public class UwpStreamProviderImplementation : ICustomStreamProvider
+    public class UniversalWindowsStreamProvider : ICustomStreamProvider
     {
         public async Task<Stream> OpenReadAsync(string filePath)
         {
