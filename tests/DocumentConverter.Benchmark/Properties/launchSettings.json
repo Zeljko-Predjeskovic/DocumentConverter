@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DocumentConverter.Benchmark": {
+      "commandName": "Project",
+      "commandLineArgs": "--logBuildOutput"
+    }
+  }
+}
