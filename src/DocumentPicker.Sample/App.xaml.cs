@@ -7,12 +7,12 @@ namespace DocumentPicker.Samples
 {
     public partial class App : Application
     {
-        public App(ICustomStreamProvider streamProvider)
+        public App()
         {
             InitializeComponent();
 
-            CrossCallingStreamProvider.RegisterStreamProvider(streamProvider);
-            MainPage = new NavigationPage(new DocumentPickerPage(streamProvider));
+            CustomStreamProviderInitializer.Init();
+            MainPage = new NavigationPage(new DocumentPickerPage());
         }
 
         protected override void OnStart()

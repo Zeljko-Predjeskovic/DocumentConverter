@@ -13,16 +13,12 @@ namespace DocumentPicker.Droid
     {
         protected override void OnCreate(Bundle bundle)
         {
-            TabLayoutResource = Resource.Layout.Tabbar;
-            ToolbarResource = Resource.Layout.Toolbar;
-
             base.OnCreate(bundle);
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
             Xamarin.Essentials.Platform.Init(this, bundle);
             Xamarin.Forms.Forms.Init(this, bundle);
-            Android.Glide.Forms.Init(this);
             SvgPlatform.Init();
-            LoadApplication(new App(new StreamProviderImplementation()));
+            LoadApplication(new App());
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

@@ -16,10 +16,9 @@ namespace DocumentConverter.Tests
         public void Setup()
         {
             SvgPlatform.Init();
-            var streamProvider = new StreamProviderImplementation();
-            CrossCallingStreamProvider.RegisterStreamProvider(streamProvider);
+            CustomStreamProviderInitializer.Init();
 
-            _documentConverterService = new DocumentConverterService(streamProvider);
+            _documentConverterService = new DocumentConverterService(CustomStreamProvider.Instance);
         }
 
         [Test]

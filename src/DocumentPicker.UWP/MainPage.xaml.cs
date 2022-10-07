@@ -13,7 +13,7 @@ namespace DocumentPicker.UWP
         {
             this.InitializeComponent();
 
-            LoadApplication(new DocumentPicker.Samples.App(new UwpStreamProviderImplementation()));
+            LoadApplication(new Samples.App());
         }
 
     }
