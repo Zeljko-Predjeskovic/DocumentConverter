@@ -1,7 +1,5 @@
 using DocumentConverter.Plugin.Shared;
-using DocumentConverter.Plugin.Shared.Picker;
 using DocumentConverter.Plugin.Shared.StreamProvider;
-using Moq;
 using Shouldly;
 using Svg;
 

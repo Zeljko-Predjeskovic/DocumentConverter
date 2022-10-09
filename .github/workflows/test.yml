@@ -1,0 +1,29 @@
+name: Test
+
+on:
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  Build:
+    runs-on: [windows-latest]
+
+    env:
+      SOLUTION: 'iCL.DocumentConverter.sln'
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
+
+    - name: Restore NuGet packages
+      run: nuget restore $SOLUTION
+      
+    - name: Execute unit tests
+      run: dotnet test .\tests\DocumentConverter.Tests\ --no-restore

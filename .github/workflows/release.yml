@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  Build:
+
+    env:
+      SOLUTION: 'iCL.DocumentConverter.sln'
+      BUILD_CONFIG: 'Release'
+
+    runs-on: [windows-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
+
+    - name: Restore NuGet packages
+      run: nuget restore $SOLUTION
+
+    - name: Get Git Version
+      run: |
+        dotnet tool install --global GitVersion.Tool --version 5.*
+        dotnet-gitversion
+        $json=dotnet-gitversion | ConvertFrom-Json
+        echo "BUILD_VERSION=$json.SemVer" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+      shell: pwsh      
+
+    - name: Build the Solution
+      run: msbuild $SOLUTION /p:Configuration=$env:BUILD_CONFIG /p:Version=$env:BUILD_VERSION
+
+    - name: Archive
+      uses: actions/upload-artifact@v2
+      with:
+        name: DocumentConverter.Plugin.nuget
+        path: ./src/DocumentPicker.Plugin/bin/Release/*.nupkg
+
+    # - name: Tag
+    #   run: git tag $BUILD_VERSION
+
+    # - name: Tag Push
+    #   run: git --tag push
+
+    # - name: Publish
+    #   run: nuget push ./src/DocumentPicker.Plugin/bin/Release/*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}}
