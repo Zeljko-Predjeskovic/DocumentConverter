@@ -9,7 +9,7 @@ using Android.App;
 [assembly: AssemblyTitle("DocumentPicker.Droid")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Optiq")]
 [assembly: AssemblyProduct("DocumentPicker.Droid")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]

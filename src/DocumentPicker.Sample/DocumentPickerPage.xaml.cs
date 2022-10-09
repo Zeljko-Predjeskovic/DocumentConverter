@@ -9,9 +9,12 @@ using FileSystem = Xamarin.Essentials.FileSystem;
 using Image = Xamarin.Forms.Image;
 using System.Threading.Tasks;
 using DocumentConverter.Plugin.Shared;
+using DocumentConverter.Plugin.Shared.FileSharing;
 using DocumentConverter.Plugin.Shared.Picker;
 using DocumentConverter.Plugin.Shared.StreamProvider;
+using DocumentPicker.Samples.PartialViews;
 using Xamarin.Essentials;
+using DocumentPicker.Samples.NotifyVisibility;
 
 namespace DocumentPicker.Samples
 {
@@ -21,7 +24,6 @@ namespace DocumentPicker.Samples
         private readonly IDocumentConverterService _converterService;
         private readonly IFilePicker _filePicker;
         private readonly ICustomStreamProvider _streamProvider;
-
 
         ObservableCollection<string> filePaths = new ObservableCollection<string>();
         
@@ -35,24 +37,22 @@ namespace DocumentPicker.Samples
 
             filePaths.CollectionChanged += Files_CollectionChanged;
 
-            pickDocument.Clicked += async (sender, args) =>
+
+            shareButton.OnCLickedShare = () =>
             {
-                var pickerOptions = new DocumentPickerOptions()
-                {
-                    PickerTitle = "Please pick a pdf file",
-                    FileTypes = new Dictionary<DevicePlatform, IEnumerable<string>>
-                    {
-                        { DevicePlatform.iOS, new[] { "com.adobe.pdf" } }, // or general UTType values
-                        { DevicePlatform.Android, new[] { "application/pdf", "application/png", "application/svg" } },
-                        { DevicePlatform.UWP, new[] { ".pdf" } }
-                    }
-                };
+                SharedVisibles.HideShareViews();
+                filePaths.Add("new" + Guid.NewGuid());
+                return true;
+            };
 
-                var filePath = await _filePicker.PickAsync(pickerOptions);
-
-                if(filePath != null)
+            var pickerOptions = new DocumentPickerOptions()
+            {
+                PickerTitle = "Please pick a pdf file",
+                FileTypes = new Dictionary<DevicePlatform, IEnumerable<string>>
                 {
-                    filePaths.Add(filePath);
+                    { DevicePlatform.iOS, new[] { "com.adobe.pdf" } }, // or general UTType values
+                    { DevicePlatform.Android, new[] { "application/pdf", "application/png", "application/svg" } },
+                    { DevicePlatform.UWP, new[] { ".pdf" } }
                 }
             };
         }
@@ -71,8 +71,6 @@ namespace DocumentPicker.Samples
 
             List<string> pageStrings = new List<string>();
 
-            int page = 1;
-
             var progressBar = new ProgressBar();
             Grid.Children.Add(progressBar);
 
@@ -85,19 +83,20 @@ namespace DocumentPicker.Samples
 
                 try
                 {
-                    var inputStream = await _streamProvider.OpenReadWriteAsync(file);
-                    var outputStream = new MemoryStream();
+                    using var inputStream = SharedStream.Instance;
+                    using var outputStream = new MemoryStream();
 
                     await _converterService.ConvertPdfToSvgAsync(inputStream, outputStream);
                     outputStream.Seek(0, SeekOrigin.Begin);
 
                     var svgDoc = SvgDocument.Open<SvgDocument>(outputStream);
                     
+                    SharedStream.DisposeStream();
 
                     await progressBar.ProgressTo(0.75, 200, Easing.Linear);
                     using (var f = File.Create(newPath))
                     {
-                        var bitMap = svgDoc.DrawAllContents();
+                        using var bitMap = svgDoc.DrawAllContents();
                         bitMap.SavePng(f, 100);
                         await progressBar.ProgressTo(1, 50, Easing.Linear);
                     }

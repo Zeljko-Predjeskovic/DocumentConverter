@@ -1,4 +1,5 @@
 ﻿using DocumentConverter.Plugin.Shared.StreamProvider;
+using DocumentPicker.Samples.NotifyVisibility;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -13,6 +14,7 @@ namespace DocumentPicker.Samples
 
             CustomStreamProviderInitializer.Init();
             MainPage = new NavigationPage(new DocumentPickerPage());
+            SharedVisibles.Init();
         }
 
         protected override void OnStart()
