@@ -1,8 +1,12 @@
-﻿using DocumentConverter.Plugin.Shared.StreamProvider;
+﻿using DocumentConverter.Plugin.Shared.FileSharing;
+using DocumentConverter.Plugin.Shared.StreamProvider;
 using DocumentPicker.Samples;
+using DocumentPicker.Samples.NotifyVisibility;
 using Foundation;
 using Svg;
 using UIKit;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace DocumentPicker.IOS
 {
@@ -21,13 +25,27 @@ namespace DocumentPicker.IOS
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            LoadApp();
+            return base.FinishedLaunching(app, options);
+        }
+
+        public override bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
+        {
+            SharedStream.Instance = System.IO.File.Open(url.Path, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.ReadWrite);
+
+            SharedVisibles.ShowShareViews();
+
+            return true;
+        }
+
+        private void LoadApp()
+        {
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
             Xamarin.Forms.Forms.Init();
             SvgPlatform.Init();
             LoadApplication(new App());
-
-            return base.FinishedLaunching(app, options);
         }
+
 
         public override void OnResignActivation(UIApplication application)
         {

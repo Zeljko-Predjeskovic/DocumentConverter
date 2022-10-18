@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentConverter.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentPicker.Droid", "src\DocumentPicker.Droid\DocumentPicker.Droid.csproj", "{F7830ABA-CFCF-481C-9AB7-D5973FFE9B85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentConverter.Benchmark", "tests\DocumentConverter.Benchmark\DocumentConverter.Benchmark.csproj", "{0275CD62-6BB8-4DBF-91B1-EB54CB18A184}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentConverter.Benchmark", "tests\DocumentConverter.Benchmark\DocumentConverter.Benchmark.csproj", "{0275CD62-6BB8-4DBF-91B1-EB54CB18A184}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

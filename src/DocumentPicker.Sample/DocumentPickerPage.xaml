@@ -1,16 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mynamespace="clr-namespace:DocumentPicker.Samples.PartialViews;assembly=DocumentPicker.Samples"
              x:Class="DocumentPicker.Samples.DocumentPickerPage"             
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="True">
 
 
     <StackLayout Spacing="10" Padding="10">
+        <Label Text="Document Picker"></Label>
+        <mynamespace:ShareNotification x:Name="Notification"></mynamespace:ShareNotification>
         <Grid x:Name="Grid">
-
         </Grid>
-        <Button x:Name="pickDocument" Text="Pick Document"/>
+        <mynamespace:ShareButton x:Name="shareButton"></mynamespace:ShareButton>
         <StackLayout Orientation="Horizontal">
         </StackLayout>
         <ScrollView>
