@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;MonoAndroid90;Xamarin.iOS10;uap10.0.17763</TargetFrameworks>
 		<PackageId>Optiq.DocumentConverter.PdfToSvg</PackageId>
-		<Version Condition="'$(Version)' == ''">1.0.0</Version>
+		<Version Condition="'$(Version)' == ''">1.0.1</Version>
   </PropertyGroup>
 
 	<PropertyGroup Condition="$(Configuration) == 'Release'">
@@ -12,7 +12,7 @@
 
 	<ItemGroup>
     <PackageReference Include="PdfToSvg.NET" Version="0.7.0" />
-    <PackageReference Include="Predjeskovic.Test.Svg" Version="2.4.3.5" />
+    <PackageReference Include="Svg" Version="2.4.3.7" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
   </ItemGroup>
 

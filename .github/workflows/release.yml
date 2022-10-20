@@ -25,16 +25,16 @@ jobs:
     - name: Restore NuGet packages
       run: nuget restore $SOLUTION
 
-    - name: Get Git Version
-      run: |
-        dotnet tool install --global GitVersion.Tool --version 5.*
-        dotnet-gitversion
-        $json=dotnet-gitversion | ConvertFrom-Json
-        echo "BUILD_VERSION=$json.SemVer" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
-      shell: pwsh      
+    # - name: Get Git Version
+    #   run: |
+    #     dotnet tool install --global GitVersion.Tool --version 5.*
+    #     dotnet-gitversion
+    #     $json=dotnet-gitversion | ConvertFrom-Json
+    #     echo "BUILD_VERSION=$json.SemVer" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+    #   shell: pwsh      
 
     - name: Build the Solution
-      run: msbuild $SOLUTION /p:Configuration=$env:BUILD_CONFIG /p:Version=$env:BUILD_VERSION
+      run: msbuild $SOLUTION /p:Configuration=$env:BUILD_CONFIG /p:Version=1.0.0 #$env:BUILD_VERSION
 
     - name: Archive
       uses: actions/upload-artifact@v2
