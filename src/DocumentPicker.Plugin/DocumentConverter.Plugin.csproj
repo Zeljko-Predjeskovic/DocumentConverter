@@ -4,7 +4,7 @@
 		<TargetFrameworks>netstandard2.0;MonoAndroid90;Xamarin.iOS10;uap10.0.17763</TargetFrameworks>
   </PropertyGroup>
 
-	<ItemGroup>
+  <ItemGroup>
     <PackageReference Include="PdfToSvg.NET" Version="0.7.0" />
     <PackageReference Include="Svg" Version="2.4.3.5" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
@@ -21,6 +21,10 @@
 		<PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.14" />
 
 		<Folder Include="Platforms\UniversalWindows\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\DocumentConverter\DocumentConverter.csproj" />
 	</ItemGroup>
 
 

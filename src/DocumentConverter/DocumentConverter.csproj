@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Company>$(Authors),amarek</Company>
+    <PackageProjectUrl>https://github.com/Zeljko-Predjeskovic/DocumentConverter</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Zeljko-Predjeskovic/DocumentConverter</RepositoryUrl>
+    <PackageTags>Opti-Q</PackageTags>
+  </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="PdfToSvg.NET" Version="0.7.0" />
+	    <PackageReference Include="Svg" Version="2.4.3.5" />
+    </ItemGroup>
+</Project>

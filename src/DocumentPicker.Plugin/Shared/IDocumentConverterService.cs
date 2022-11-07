@@ -4,11 +4,9 @@ using System.Threading.Tasks;
 
 namespace DocumentConverter.Plugin.Shared
 {
-    public interface IDocumentConverterService
+    public interface IDocumentConverterService : IPdfToSvgConverter
     {
         Task<DocumentConverterResult> ConvertPdfToSvgAsync(string filePath, string outputDir, CancellationToken cancellationToken = default);
         Task<DocumentConverterResult> ConvertPdfToSvgStringAsync(string filePath, CancellationToken cancellationToken = default);
-        Task ConvertPdfToSvgAsync(Stream inputStream, Stream outputStream ,CancellationToken cancellationToken = default);
-
     }
 }

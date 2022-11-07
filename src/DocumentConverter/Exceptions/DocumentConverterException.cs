@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DocumentConverter.Plugin.Shared
+namespace DocumentConverter.Exceptions
 {
     public class DocumentConverterException : Exception
     {
