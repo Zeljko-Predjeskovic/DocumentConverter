@@ -1,7 +1,6 @@
+using DocumentConverter.Exceptions;
 using DocumentConverter.Plugin.Shared;
-using DocumentConverter.Plugin.Shared.Picker;
 using DocumentConverter.Plugin.Shared.StreamProvider;
-using Moq;
 using Shouldly;
 using Svg;
 
@@ -26,11 +25,14 @@ namespace DocumentConverter.Tests
         {
             //Arrange
             var filePath = ".\\Resources\\Vienna.pdf";
+            File.Copy(filePath, ".\\Vienna_1.pdf", true);
+
             var outputDir = ".\\Resources";
-            var expectedOutput = ".\\Resources\\Vienna.svg";
+            var expectedOutput = ".\\Resources\\Vienna_1.svg";
+
 
             //Act
-            var result = await _documentConverterService.ConvertPdfToSvgAsync(filePath, outputDir);
+            var result = await _documentConverterService.ConvertPdfToSvgAsync(".\\Vienna_1.pdf", outputDir);
 
             //Assert
             Assert.That(result.PageCount, Is.EqualTo(1));
@@ -67,9 +69,9 @@ namespace DocumentConverter.Tests
 
 
             //Assert
-            var exception = Assert.ThrowsAsync<DocumentConverterException>(async () => await Action());
+            var exception = Assert.ThrowsAsync<PdfNotFoundException>(async () => await Action());
             Assert.That(exception.Message, Is.EqualTo("Could not find file '" + Path.GetFullPath(filePath) + "'.") );
-            var exception2 = Assert.ThrowsAsync<DocumentConverterException>(async () => await Action2());
+            var exception2 = Assert.ThrowsAsync<PdfNotFoundException>(async () => await Action2());
             Assert.That(exception2.Message, Is.EqualTo("Could not find file '" + Path.GetFullPath(filePath) + "'.") );
         }
 
@@ -85,9 +87,9 @@ namespace DocumentConverter.Tests
             async Task Action2() => await _documentConverterService.ConvertPdfToSvgStringAsync(filePath);
 
             //Assert
-            var exception = Assert.ThrowsAsync<DocumentConverterException>(async () => await Action());
+            var exception = Assert.ThrowsAsync<PdfConversionException>(async () => await Action());
             Assert.That(exception.Message, Is.EqualTo("The specified file is not a valid PDF file. No file header was found."));
-            var exception2 = Assert.ThrowsAsync<DocumentConverterException>(async () => await Action2());
+            var exception2 = Assert.ThrowsAsync<PdfConversionException>(async () => await Action2());
             Assert.That(exception2.Message, Is.EqualTo("The specified file is not a valid PDF file. No file header was found."));
         }
 
@@ -103,7 +105,7 @@ namespace DocumentConverter.Tests
             var docResult =  _documentConverterService.ConvertPdfToSvgAsync(filePath, outputDir);
 
             //Assert
-            var x = Assert.ThrowsAsync<DocumentConverterException>(async () => await docResult);
+            var x = Assert.ThrowsAsync<ScannedPdfException>(async () => await docResult);
             x.Message.ShouldBe("The PDF page seems to be from a scanned document. Please upload this plan as image instead (.jpeg, .png)");
         }
 
@@ -118,7 +120,7 @@ namespace DocumentConverter.Tests
             var docResult = _documentConverterService.ConvertPdfToSvgAsync(filePath, outputDir);
 
             //Assert
-            var x = Assert.ThrowsAsync<DocumentConverterException>(async () => await docResult);
+            var x = Assert.ThrowsAsync<MultiPagePdfException>(async () => await docResult);
             x.Message.ShouldBe("Pdf document contains multiple pages - provide a single-page document");
         }
 
@@ -127,7 +129,8 @@ namespace DocumentConverter.Tests
         {
             //Arrange
             var svgStringExpected = await File.ReadAllTextAsync(".\\Resources\\Vienna.svg");
-            await using var inputStream = File.Open(".\\Resources\\Vienna.pdf",FileMode.OpenOrCreate,FileAccess.ReadWrite);
+
+            await using var inputStream = File.Open(".\\Resources\\Vienna.pdf", FileMode.Open, FileAccess.Read);
             using var outputStream = new MemoryStream();
        
             
@@ -146,14 +149,14 @@ namespace DocumentConverter.Tests
         public async Task WhenGivingInvalidPdfStreamInput_ShouldThrowException()
         {
             //Arrange
-            await using var inputStream = File.Open(".\\Resources\\TextFile.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            await using var inputStream = File.Open(".\\Resources\\TextFile.txt", FileMode.Open, FileAccess.Read);
             using var outputStream = new MemoryStream();
 
             //Act
             var action = _documentConverterService.ConvertPdfToSvgAsync(inputStream, outputStream);
 
             //Assert
-            var x = Assert.ThrowsAsync<DocumentConverterException>(async () => await action);
+            var x = Assert.ThrowsAsync<PdfConversionException>(async () => await action);
             x.Message.ShouldBe("The specified file is not a valid PDF file. No file header was found.");
         }
 
@@ -161,14 +164,14 @@ namespace DocumentConverter.Tests
         public async Task WhenGivingPdfWithManyPagesStreamInput_ShouldThrowException()
         {
             //Arrange
-            await using var inputStream = File.Open(".\\Resources\\l1.pdf", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            await using var inputStream = File.Open(".\\Resources\\l1.pdf", FileMode.Open, FileAccess.Read);
             using var outputStream = new MemoryStream();
 
             //Act
             var action = _documentConverterService.ConvertPdfToSvgAsync(inputStream, outputStream);
 
             //Assert
-            var x = Assert.ThrowsAsync<DocumentConverterException>(async () => await action);
+            var x = Assert.ThrowsAsync<MultiPagePdfException>(async () => await action);
             x.Message.ShouldBe("Pdf document contains multiple pages - provide a single-page document");
         }
 
@@ -177,14 +180,14 @@ namespace DocumentConverter.Tests
         public async Task WhenGivingScannedPdfStreamInput_ShouldThrowException()
         {
             //Arrange
-            await using var inputStream = File.Open(".\\Resources\\Scanned.pdf", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            await using var inputStream = File.Open(".\\Resources\\Scanned.pdf", FileMode.Open, FileAccess.Read);
             using var outputStream = new MemoryStream();
 
             //Act
             var action = _documentConverterService.ConvertPdfToSvgAsync(inputStream, outputStream);
 
             //Assert
-            var x = Assert.ThrowsAsync<DocumentConverterException>(async () => await action);
+            var x = Assert.ThrowsAsync<ScannedPdfException>(async () => await action);
             x.Message.ShouldBe("The PDF page seems to be from a scanned document. Please upload this plan as image instead (.jpeg, .png)");
         }
     }
