@@ -10,7 +10,7 @@
   </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="PdfToSvg.NET" Version="0.7.0" />
+        <PackageReference Include="PdfToSvg.NET" Version="0.8.0" />
 	    <PackageReference Include="Svg" Version="2.4.3.5" />
     </ItemGroup>
 </Project>
