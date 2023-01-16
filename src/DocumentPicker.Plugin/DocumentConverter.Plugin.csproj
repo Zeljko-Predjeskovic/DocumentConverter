@@ -1,11 +1,18 @@
-<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
 	
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;MonoAndroid90;Xamarin.iOS10;uap10.0.17763</TargetFrameworks>
-  </PropertyGroup>
+		<PackageId>Optiq.DocumentConverter.PdfToSvg</PackageId>
+		<Version>1.0.2</Version>
+		<PackageReleaseNotes>
+			#1.0.2
+
+			- update pdfToSvg library
+		</PackageReleaseNotes>
+	</PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PdfToSvg.NET" Version="0.7.0" />
+    <PackageReference Include="PdfToSvg.NET" Version="0.8.0" />
     <PackageReference Include="Svg" Version="2.4.3.5" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
   </ItemGroup>

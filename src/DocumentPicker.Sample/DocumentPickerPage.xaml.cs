@@ -8,6 +8,7 @@ using Xamarin.Forms.Xaml;
 using FileSystem = Xamarin.Essentials.FileSystem;
 using Image = Xamarin.Forms.Image;
 using System.Threading.Tasks;
+using DocumentConverter.Exceptions;
 using DocumentConverter.Plugin.Shared;
 using DocumentConverter.Plugin.Shared.Picker;
 using DocumentConverter.Plugin.Shared.StreamProvider;
