@@ -167,6 +167,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DocumentConverter\DocumentConverter.csproj">
+      <Project>{ea7ecadc-4a23-4642-80bb-fe75ff7d231c}</Project>
+      <Name>DocumentConverter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DocumentPicker.Plugin\DocumentConverter.Plugin.csproj">
       <Project>{e7daa66a-5132-4441-bffe-6661a28ebeb7}</Project>
       <Name>DocumentConverter.Plugin</Name>
