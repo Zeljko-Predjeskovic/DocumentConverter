@@ -13,6 +13,7 @@ using DocumentConverter.Plugin.Shared;
 using DocumentConverter.Plugin.Shared.Picker;
 using DocumentConverter.Plugin.Shared.StreamProvider;
 using Xamarin.Essentials;
+using Color = Svg.Interfaces.Color;
 
 namespace DocumentPicker.Samples
 {
@@ -98,7 +99,7 @@ namespace DocumentPicker.Samples
                     await progressBar.ProgressTo(0.75, 200, Easing.Linear);
                     using (var f = File.Create(newPath))
                     {
-                        var bitMap = svgDoc.DrawAllContents();
+                        var bitMap = svgDoc.DrawDocument(backgroundColor:Color.Create(255,255,255), maxWidthHeight:2000);
                         bitMap.SavePng(f, 100);
                         await progressBar.ProgressTo(1, 50, Easing.Linear);
                     }
