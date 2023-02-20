@@ -7,8 +7,12 @@
     <PackageProjectUrl>https://github.com/Zeljko-Predjeskovic/DocumentConverter</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Zeljko-Predjeskovic/DocumentConverter</RepositoryUrl>
     <PackageTags>Opti-Q</PackageTags>
-    <Version>1.0.3</Version>
+    <Version>1.0.5</Version>
 	  <PackageReleaseNotes>
+		  #1.0.5
+		  - package updates
+		  #1.0.4
+		  - package updates
 		  #1.0.3
 		  - package updates
 		  #1.0.2
@@ -18,6 +22,6 @@
 
     <ItemGroup>
         <PackageReference Include="PdfToSvg.NET" Version="0.8.0" />
-	    <PackageReference Include="Svg" Version="2.4.3.14" />
+	    <PackageReference Include="Svg" Version="2.4.3.16" />
     </ItemGroup>
 </Project>

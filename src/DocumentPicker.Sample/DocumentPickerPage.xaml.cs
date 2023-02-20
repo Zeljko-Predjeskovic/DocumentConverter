@@ -79,7 +79,7 @@ namespace DocumentPicker.Samples
             Grid.Children.Add(progressBar);
 
             var newPath = Path.Combine(FileSystem.CacheDirectory,
-                Path.GetFileNameWithoutExtension(file) + ".png");
+                Guid.NewGuid() + ".png");
 
             var taskResult = await Task.Run(async () =>
             {
@@ -87,23 +87,39 @@ namespace DocumentPicker.Samples
 
                 try
                 {
-                    var inputStream = await _streamProvider.OpenReadWriteAsync(file);
-                    var outputStream = new MemoryStream();
-
-                    await _converterService.ConvertPdfToSvgAsync(inputStream, outputStream);
-                    outputStream.Seek(0, SeekOrigin.Begin);
-
-                    var svgDoc = SvgDocument.Open<SvgDocument>(outputStream);
-                    
-
-                    await progressBar.ProgressTo(0.75, 200, Easing.Linear);
-                    using (var f = File.Create(newPath))
+                    using (var inputStream = await _streamProvider.OpenReadWriteAsync(file))
                     {
-                        var bitMap = svgDoc.DrawDocument(backgroundColor:Color.Create(255,255,255), maxWidthHeight:2000);
-                        bitMap.SavePng(f, 100);
-                        await progressBar.ProgressTo(1, 50, Easing.Linear);
-                    }
+                        using (var outputStream = new MemoryStream())
+                        {
+                            await _converterService.ConvertPdfToSvgAsync(inputStream, outputStream);
+                            outputStream.Seek(0, SeekOrigin.Begin);
 
+                            var guide = Guid.NewGuid().ToString();
+                            using (var x = File.Create(Path.Combine(Path.Combine(FileSystem.CacheDirectory, guide+ ".svg"))))
+                            {
+
+                            };
+
+                            using (var stream = await _streamProvider.OpenReadWriteAsync(Path.Combine(FileSystem.CacheDirectory,
+                                       guide + ".svg")))
+                            {
+                                await outputStream.CopyToAsync(stream);
+                            }
+                            outputStream.Seek(0, SeekOrigin.Begin);
+
+                            var svgDoc = SvgDocument.Open<SvgDocument>(outputStream);
+
+
+                            await progressBar.ProgressTo(0.75, 200, Easing.Linear);
+                            using (var f = File.Create(newPath))
+                            {
+                                var bitMap = svgDoc.DrawDocument(backgroundColor: Color.Create(255, 255, 255),
+                                    maxWidthHeight: 2000);
+                                bitMap.SavePng(f, 100);
+                                await progressBar.ProgressTo(1, 50, Easing.Linear);
+                            }
+                        }
+                    }
                     return (newPath, true);
                 }
                 catch (DocumentConverterException ex)
