@@ -34,7 +34,7 @@ namespace DocumentConverter
 
                 using var ms = new MemoryStream();
                 await doc.Pages[0]
-                    .SaveAsSvgAsync(ms,
+                    .SaveAsSvgAsync(ms,new SvgConversionOptions{FontResolver = FontResolver.EmbedOpenType},
                         cancellationToken: cancellationToken);
                 ms.Seek(0, SeekOrigin.Begin);
 

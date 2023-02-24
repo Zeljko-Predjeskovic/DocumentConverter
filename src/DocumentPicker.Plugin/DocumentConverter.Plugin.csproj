@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="PdfToSvg.NET" Version="0.8.0" />
-    <PackageReference Include="Svg" Version="2.4.3.16" />
+    <PackageReference Include="Svg" Version="2.4.4.1" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
   </ItemGroup>
 
