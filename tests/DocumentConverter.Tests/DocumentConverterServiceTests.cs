@@ -190,5 +190,29 @@ namespace DocumentConverter.Tests
             var x = Assert.ThrowsAsync<ScannedPdfException>(async () => await action);
             x.Message.ShouldBe("The PDF page seems to be from a scanned document. Please upload this plan as image instead (.jpeg, .png)");
         }
+
+        
+
+        [Test]
+        public async Task WhenGivingPdfSource_WithOpenFont_ConvertToSvg()
+        {
+            //Arrange
+            var filePath = ".\\Resources\\Top3.pdf";
+            File.Copy(filePath, ".\\Top3_1.pdf", true);
+
+            var outputDir = ".\\Resources";
+            var expectedOutput = ".\\Resources\\Top3_1.svg";
+
+
+            //Act
+            var result = await _documentConverterService.ConvertPdfToSvgAsync(".\\Top3_1.pdf", outputDir);
+
+            //Assert
+            Assert.That(result.PageCount, Is.EqualTo(1));
+            Assert.That(result.ResultPath, Is.EqualTo(expectedOutput));
+            Assert.That(File.Exists(expectedOutput));
+            var input = File.ReadAllText(expectedOutput);
+            Assert.That(result.Content, Is.EqualTo(input));
+        }
     }
 }
