@@ -7,8 +7,10 @@
     <PackageProjectUrl>https://github.com/Zeljko-Predjeskovic/DocumentConverter</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Zeljko-Predjeskovic/DocumentConverter</RepositoryUrl>
     <PackageTags>Opti-Q</PackageTags>
-    <Version>1.0.6</Version>
+    <Version>1.0.7.1</Version>
 	  <PackageReleaseNotes>
+		  #1.0.7.1
+		  - updated pdftosvg to fix embedded caracter with issue
 		  #1.0.6
 		  - switch open type fonts
 		  #1.0.5
@@ -23,7 +25,7 @@
   </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="PdfToSvg.NET" Version="0.8.0" />
+        <PackageReference Include="PdfToSvg.NET" Version="0.8.1" />
 	    <PackageReference Include="Svg" Version="2.4.4.1" />
     </ItemGroup>
 </Project>
