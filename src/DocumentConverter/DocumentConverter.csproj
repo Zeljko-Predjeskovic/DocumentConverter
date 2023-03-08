@@ -7,8 +7,10 @@
     <PackageProjectUrl>https://github.com/Zeljko-Predjeskovic/DocumentConverter</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Zeljko-Predjeskovic/DocumentConverter</RepositoryUrl>
     <PackageTags>Opti-Q</PackageTags>
-    <Version>1.0.7.1</Version>
+    <Version>1.0.7.2</Version>
 	  <PackageReleaseNotes>
+		  #1.0.7.2
+		  - PdfToSvgConverter does not dispose streams
 		  #1.0.7.1
 		  - updated pdftosvg to fix embedded caracter with issue
 		  #1.0.6

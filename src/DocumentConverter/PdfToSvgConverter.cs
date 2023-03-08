@@ -26,7 +26,7 @@ namespace DocumentConverter
 
             try
             {
-                using var doc = await PdfDocument.OpenAsync(openStream,
+                var doc = await PdfDocument.OpenAsync(openStream,
                     cancellationToken: cancellationToken);
                 
                 if(doc.Pages.Count != 1)
