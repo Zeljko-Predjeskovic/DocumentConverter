@@ -3,6 +3,7 @@ using Android;
 using Android.App;
 using Android.Content.PM;
 using DocumentConverter.Plugin.Shared.Picker;
+using Xamarin.Essentials;
 
 namespace DocumentConverter.Plugin.Platforms.Android
 {
@@ -17,8 +18,10 @@ namespace DocumentConverter.Plugin.Platforms.Android
 
         public async Task<string> PickAsync(DocumentPickerOptions options = null)
         {
-
-            if (Application.Context.CheckSelfPermission(Manifest.Permission.WriteExternalStorage) != (int)Permission.Granted)
+            var storageWrite = new Permissions.StorageWrite();
+            var writePermission = await storageWrite.RequestAsync();
+            
+            if ((int)writePermission != (int)PermissionStatus.Granted)
             {
                 throw new FilePickerPermissionException("No permission for android files!");
             }
