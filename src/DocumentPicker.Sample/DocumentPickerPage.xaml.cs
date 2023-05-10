@@ -29,9 +29,9 @@ namespace DocumentPicker.Samples
         
         public DocumentPickerPage()
         {
-            _streamProvider = CustomStreamProvider.Instance;
-            _converterService = new DocumentConverterService(CustomStreamProvider.Instance);
-            _filePicker = new FilePickerImplementation();
+            _streamProvider = DocumentConverterProvider.StreamProvider;
+            _converterService = new DocumentConverterService(_streamProvider);
+            _filePicker = DocumentConverterProvider.FilePicker;
 
             InitializeComponent();
 
@@ -50,12 +50,23 @@ namespace DocumentPicker.Samples
                     }
                 };
 
-                var filePath = await _filePicker.PickAsync(pickerOptions);
-
-                if(filePath != null)
+                try
                 {
-                    filePaths.Add(filePath);
+                    var filePath = await _filePicker.PickAsync(pickerOptions);
+                    if (filePath != null)
+                    {
+                        filePaths.Add(filePath);
+                    }
                 }
+                catch (FilePickerException)
+                {
+                    if (await DisplayAlert("Picker wont work!", "Please enable in settings!!", "ok", "cancel"))
+                    {
+                        Xamarin.Essentials.AppInfo.ShowSettingsUI();
+                    }
+                }
+
+                
             };
         }
 

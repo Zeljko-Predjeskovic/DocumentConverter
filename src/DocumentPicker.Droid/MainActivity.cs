@@ -1,8 +1,8 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
-using DocumentConverter.Plugin.Shared.StreamProvider;
 using DocumentPicker.Samples;
 using Svg;
 
@@ -26,5 +26,7 @@ namespace DocumentPicker.Droid
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
+        
     }
 }
