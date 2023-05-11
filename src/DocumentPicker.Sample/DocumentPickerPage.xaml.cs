@@ -58,7 +58,7 @@ namespace DocumentPicker.Samples
                         filePaths.Add(filePath);
                     }
                 }
-                catch (FilePickerException)
+                catch (FilePickerPermissionException)
                 {
                     if (await DisplayAlert("Picker wont work!", "Please enable in settings!!", "ok", "cancel"))
                     {
