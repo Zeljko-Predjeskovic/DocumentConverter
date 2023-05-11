@@ -1,4 +1,4 @@
-﻿using DocumentConverter.Plugin.Shared.StreamProvider;
+﻿using DocumentConverter.Plugin.Shared;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,7 +11,8 @@ namespace DocumentPicker.Samples
         {
             InitializeComponent();
 
-            CustomStreamProviderInitializer.Init();
+            DocumentConverterInitializer.Init();
+
             MainPage = new NavigationPage(new DocumentPickerPage());
         }
 

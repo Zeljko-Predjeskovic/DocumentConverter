@@ -42,6 +42,12 @@
 		<Folder Include="Platforms\UniversalWindows\" />
 	</ItemGroup>
 
+	<ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
+		<Compile Include="Platforms\Android\**\*.cs" />
+
+		<Folder Include="Platforms\Android\" />
+	</ItemGroup>
+
 	<ItemGroup>
 	  <ProjectReference Include="..\DocumentConverter\DocumentConverter.csproj" />
 	</ItemGroup>
