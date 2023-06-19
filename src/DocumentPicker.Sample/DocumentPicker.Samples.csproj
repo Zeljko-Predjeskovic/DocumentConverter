@@ -1,24 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <UseMaui>true</UseMaui>
+    <TargetFrameworks>net6.0</TargetFrameworks>
+    <OutputType>Library</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <SingleProject>true</SingleProject>
   </PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Svg" Version="2.4.4.1" />
-		<PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
-		<PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
-		<PackageReference Include="Xamarin.Forms" Version="4.5.0.356" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\DocumentPicker.Plugin\DocumentConverter.Plugin.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Update="DocumentPickerPage.xaml">
-			<Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-		</EmbeddedResource>
-	</ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="Svg" Version="2.4.4.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DocumentPicker.Plugin\DocumentConverter.Plugin.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="DocumentPickerPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

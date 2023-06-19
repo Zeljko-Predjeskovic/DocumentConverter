@@ -1,6 +1,8 @@
 ﻿using DocumentConverter.Plugin.Shared;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+using Microsoft.Maui.Controls.Xaml;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
+using Svg;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace DocumentPicker.Samples
@@ -11,6 +13,7 @@ namespace DocumentPicker.Samples
         {
             InitializeComponent();
 
+            SvgPlatform.Init();
             DocumentConverterInitializer.Init();
 
             MainPage = new NavigationPage(new DocumentPickerPage());

@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using Svg;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-using FileSystem = Xamarin.Essentials.FileSystem;
-using Image = Xamarin.Forms.Image;
+using Microsoft.Maui.Controls.Xaml;
+using FileSystem = Microsoft.Maui.Storage.FileSystem;
 using System.Threading.Tasks;
 using DocumentConverter.Exceptions;
 using DocumentConverter.Plugin.Shared;
 using DocumentConverter.Plugin.Shared.Picker;
 using DocumentConverter.Plugin.Shared.StreamProvider;
-using Xamarin.Essentials;
 using Color = Svg.Interfaces.Color;
+using Microsoft.Maui.Storage;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
+using IFilePicker = DocumentConverter.Plugin.Shared.Picker.IFilePicker;
+using Image = Microsoft.Maui.Controls.Image;
 
 namespace DocumentPicker.Samples
 {
@@ -46,7 +48,7 @@ namespace DocumentPicker.Samples
                     {
                         { DevicePlatform.iOS, new[] { "com.adobe.pdf" } }, // or general UTType values
                         { DevicePlatform.Android, new[] { "application/pdf", "application/png", "application/svg" } },
-                        { DevicePlatform.UWP, new[] { ".pdf" } }
+                        { DevicePlatform.WinUI, new[] { ".pdf" } }
                     }
                 };
 
@@ -62,7 +64,7 @@ namespace DocumentPicker.Samples
                 {
                     if (await DisplayAlert("Picker wont work!", "Please enable in settings!!", "ok", "cancel"))
                     {
-                        Xamarin.Essentials.AppInfo.ShowSettingsUI();
+                        Microsoft.Maui.ApplicationModel.AppInfo.ShowSettingsUI();
                     }
                 }
 

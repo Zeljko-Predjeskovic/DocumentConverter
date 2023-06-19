@@ -3,7 +3,7 @@ using Android;
 using Android.App;
 using Android.Content.PM;
 using DocumentConverter.Plugin.Shared.Picker;
-using Xamarin.Essentials;
+using IFilePicker = DocumentConverter.Plugin.Shared.Picker.IFilePicker;
 
 namespace DocumentConverter.Plugin.Platforms.Android
 {

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Xamarin.Essentials;
 
 namespace DocumentConverter.Plugin.Shared.Picker
 {

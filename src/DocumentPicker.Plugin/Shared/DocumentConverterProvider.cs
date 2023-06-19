@@ -1,5 +1,6 @@
 ﻿using DocumentConverter.Plugin.Shared.Picker;
 using DocumentConverter.Plugin.Shared.StreamProvider;
+using IFilePicker = DocumentConverter.Plugin.Shared.Picker.IFilePicker;
 
 namespace DocumentConverter.Plugin.Shared
 {
