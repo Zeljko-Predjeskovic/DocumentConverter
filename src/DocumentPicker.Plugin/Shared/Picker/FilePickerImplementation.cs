@@ -7,7 +7,7 @@ namespace DocumentConverter.Plugin.Shared.Picker
 {
     public class FilePickerImplementation : IFilePicker
     {
-        public async Task<string> PickAsync(DocumentPickerOptions pickerOptions = null)
+        public async Task<FilePickerResult> PickAsync(DocumentPickerOptions pickerOptions = null)
         {
             if (pickerOptions == null)
             {
@@ -36,7 +36,7 @@ namespace DocumentConverter.Plugin.Shared.Picker
                 if (fileResult == null) 
                     return null;
                 
-                return fileResult.FullPath;
+                return new FilePickerResult(fileResult.FileName,fileResult.FullPath);
             }
 
             catch (Exception e)
