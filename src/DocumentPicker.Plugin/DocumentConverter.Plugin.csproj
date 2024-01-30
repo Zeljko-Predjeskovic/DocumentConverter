@@ -3,8 +3,10 @@
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;MonoAndroid90;Xamarin.iOS10;uap10.0.17763</TargetFrameworks>
 		<PackageId>Optiq.DocumentConverter.PdfToSvg</PackageId>
-		<Version>1.0.7.4</Version>
+		<Version>1.0.7.5</Version>
 		<PackageReleaseNotes>
+			#1.0.7.5
+			custom android picker
 			#1.0.7.4
 			Update pdftosvgt to latest version 0.14.1 and svg to 2.4.4.6
 			#1.0.7.3
