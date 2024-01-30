@@ -7,8 +7,10 @@
     <PackageProjectUrl>https://github.com/Zeljko-Predjeskovic/DocumentConverter</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Zeljko-Predjeskovic/DocumentConverter</RepositoryUrl>
     <PackageTags>Opti-Q</PackageTags>
-    <Version>1.0.7.3</Version>
+    <Version>1.0.7.4</Version>
 	  <PackageReleaseNotes>
+		  #1.0.7.4
+		  added FilePickerResult
 		  #1.0.7.3
 		  Update pdftosvgt to latest version 0.14.1 and svg to 2.4.4.6
 		  #1.0.7.2
