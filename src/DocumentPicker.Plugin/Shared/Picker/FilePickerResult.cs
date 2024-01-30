@@ -15,7 +15,7 @@ namespace DocumentConverter.Plugin.Shared.Picker
             FullPath = fullPath;
         }
         
-        private Action OnDispose { get; set; } = (() => { return; });
+        internal Action OnDispose { get; set; } = (() => { return; });
 
         public void Dispose()
         {
