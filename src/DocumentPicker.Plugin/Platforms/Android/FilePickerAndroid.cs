@@ -10,6 +10,8 @@ using Xamarin.Essentials;
 using FilePickerImplementation = DocumentConverter.Plugin.Shared.Picker.FilePickerImplementation;
 using System.Linq;
 using System.Net.Mime;
+using DocumentConverter.Exceptions;
+using System.Collections.Generic;
 
 namespace DocumentConverter.Plugin.Platforms.Android
 {
@@ -20,7 +22,6 @@ namespace DocumentConverter.Plugin.Platforms.Android
         private int _requestId;
         private TaskCompletionSource<string> _completionSource;
         private readonly string _tempFolderPath;
-
 
 
         private EventHandler<FilePickerEventArgs> Handler { get; }
@@ -38,24 +39,30 @@ namespace DocumentConverter.Plugin.Platforms.Android
             {
                 var tcs = Interlocked.Exchange(ref _completionSource, null);
 
+                if (Path.GetExtension(e.FileName) != ".pdf")
+                {
+                    throw new PdfConversionException("Invalid file! Please pick a pdf!");
+                }
+
                 using var stream = new MemoryStream();
+
                 var path = StoreFileTemporaryAsync(e.Stream, e.FileName);
                 FilePickerActivity.FilePicked -= Handler;
 
-                tcs?.SetResult(path);
+                tcs?.SetResult(e.FileName);
             };
 
-            CancelledHandler = (s, e) => {
+            CancelledHandler = (s, e) =>
+            {
                 var tcs = Interlocked.Exchange(ref _completionSource, null);
 
                 FilePickerActivity.FilePickCancelled -= CancelledHandler;
 
                 tcs?.SetResult(null);
             };
-
         }
 
-        public async Task<string> PickAsync(DocumentPickerOptions options = null)
+        public async Task<FilePickerResult> PickAsync(DocumentPickerOptions options = null)
         {
             var version = (int)Build.VERSION.SdkInt;
 
@@ -72,8 +79,13 @@ namespace DocumentConverter.Plugin.Platforms.Android
 
                 return await _implementation.PickAsync(options);
             }
-            
-            return await this.PickAsync(options);
+
+            var fileName = await this.PickAsync();
+
+            var filePickerResult = new FilePickerResult(fileName, Path.Combine(_tempFolderPath, fileName));
+            filePickerResult.OnDispose = ClearTempFolder;
+
+            return filePickerResult;
         }
 
         private async Task<string> PickAsync()
@@ -139,12 +151,29 @@ namespace DocumentConverter.Plugin.Platforms.Android
 
             if (!Directory.Exists(_tempFolderPath)) Directory.CreateDirectory(_tempFolderPath);
 
-            var bytes = new byte[sharedFileStream.Length];
-
-            File.WriteAllBytes(destinationFile, bytes);
-
+            using var destinationStream = File.OpenWrite(destinationFile);
+            sharedFileStream.CopyTo(destinationStream);
 
             return destinationFile;
+        }
+
+        private void ClearTempFolder()
+        {
+            if (!Directory.Exists(_tempFolderPath))
+                return;
+
+            foreach (var f in Directory.EnumerateFileSystemEntries(_tempFolderPath, "*.*", SearchOption.AllDirectories)
+                         .Where(File.Exists))
+            {
+                try
+                {
+                    File.Delete(f);
+                }
+                catch (Exception x)
+                {
+                    throw new FilePickerException($"Failed deleting folder {_tempFolderPath}!");
+                }
+            }
         }
     }
 }

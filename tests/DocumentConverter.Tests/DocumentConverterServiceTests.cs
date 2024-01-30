@@ -1,6 +1,5 @@
 using DocumentConverter.Exceptions;
 using DocumentConverter.Plugin.Shared;
-using DocumentConverter.Plugin.Shared.StreamProvider;
 using Shouldly;
 using Svg;
 

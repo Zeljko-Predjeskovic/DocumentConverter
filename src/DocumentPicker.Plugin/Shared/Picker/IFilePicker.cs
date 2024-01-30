@@ -4,6 +4,6 @@ namespace DocumentConverter.Plugin.Shared.Picker
 {
     public interface IFilePicker
     {
-        Task<string> PickAsync(DocumentPickerOptions options = null);
+        Task<FilePickerResult> PickAsync(DocumentPickerOptions options = null);
     }
 }
