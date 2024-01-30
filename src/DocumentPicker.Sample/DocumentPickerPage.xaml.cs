@@ -52,13 +52,12 @@ namespace DocumentPicker.Samples
 
                 try
                 {
-                    using (var filePath = await _filePicker.PickAsync(pickerOptions))
-                    {
+                    var filePath = await _filePicker.PickAsync(pickerOptions);
+                    
                         if (filePath != null)
                         {
                             filePaths.Add(filePath.FullPath);
                         }
-                    }
                 }
                 catch (FilePickerPermissionException)
                 {
