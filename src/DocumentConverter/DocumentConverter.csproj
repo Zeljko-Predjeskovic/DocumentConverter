@@ -31,7 +31,7 @@
   </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="PdfToSvg.NET" Version="0.14.1" />
-	    <PackageReference Include="Svg" Version="2.4.4.6" />
+        <PackageReference Include="PdfToSvg.NET" Version="1.1.0" />
+	    <PackageReference Include="Svg" Version="2.4.4.8" />
     </ItemGroup>
 </Project>
