@@ -3,8 +3,10 @@
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;MonoAndroid90;Xamarin.iOS10;uap10.0.17763</TargetFrameworks>
 		<PackageId>Optiq.DocumentConverter.PdfToSvg</PackageId>
-		<Version>2.0.0.2</Version>
+		<Version>2.0.0.3</Version>
 		<PackageReleaseNotes>
+			#2.0.0.3
+			update svg package
 			#2.0.0.2
 			render plan clippaths
 			#2.0.0.1
@@ -35,7 +37,7 @@
 
   <ItemGroup>
     <PackageReference Include="PdfToSvg.NET" Version="1.1.0" />
-    <PackageReference Include="Svg" Version="2.4.4.8" />
+    <PackageReference Include="Svg" Version="2.4.4.9" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
   </ItemGroup>
 
