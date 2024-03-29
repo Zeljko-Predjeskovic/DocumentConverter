@@ -7,8 +7,10 @@
     <PackageProjectUrl>https://github.com/Zeljko-Predjeskovic/DocumentConverter</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Zeljko-Predjeskovic/DocumentConverter</RepositoryUrl>
     <PackageTags>Opti-Q</PackageTags>
-    <Version>1.0.7.5</Version>
+    <Version>1.0.7.6</Version>
 	  <PackageReleaseNotes>
+		  #1.0.7.6
+		  update svg package
 		  #1.0.7.5
 		  render plan clippaths
 		  #1.0.7.4
@@ -34,6 +36,6 @@
 
     <ItemGroup>
         <PackageReference Include="PdfToSvg.NET" Version="1.1.0" />
-	    <PackageReference Include="Svg" Version="2.4.4.8" />
+	    <PackageReference Include="Svg" Version="2.4.4.9" />
     </ItemGroup>
 </Project>
