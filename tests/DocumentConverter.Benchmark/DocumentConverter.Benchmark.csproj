@@ -36,7 +36,7 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.2" />
-    <PackageReference Include="Svg" Version="2.4.4.9" />
+    <PackageReference Include="Svg" Version="2.4.4.10" />
   </ItemGroup>
 
   <ItemGroup>
